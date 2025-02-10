@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const passport = require("./config/passport");
 const authRoutes = require("./routes/auth");
 const MongoStore = require("connect-mongo");
-const {MongoClient, ServerApiVersion} = require("mongodb");
+const { MongoClient, ServerApiVersion} = require("mongodb");
 
 require("dotenv").config();
 

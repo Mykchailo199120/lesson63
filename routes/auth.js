@@ -34,12 +34,9 @@ router.get('/logout', (req, res) => {
     });
 });
 
-router.get('/protected', (req, res) => {
-    if (req.isAuthenticated()) {
-        res.send('Це захищенний марщрут!');
-    }else {
-        res.redirect('/login');
-    }
+router.get('/', (req, res) => {
+    res.send('Це корньовий роут');
+
 })
 
 module.exports = router;
