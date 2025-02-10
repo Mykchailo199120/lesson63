@@ -5,6 +5,7 @@ const passport = require("./config/passport");
 const authRoutes = require("./routes/auth");
 const MongoStore = require("connect-mongo");
 const { MongoClient, ServerApiVersion} = require("mongodb");
+const { Schema, model } = mongoose;
 
 require("dotenv").config();
 
@@ -18,6 +19,14 @@ const client = new MongoClient(DB_URI, {
         deprecationErrors: true,
     }
 });
+
+const ItemSchema = new Schema({
+    name: { type: String, required: true },
+    price: { type: Number, required: true },
+    category: { type: String },
+});
+
+const Item = model("Item", ItemSchema);
 
 async function run() {
     try {
