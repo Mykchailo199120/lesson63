@@ -4,13 +4,10 @@ const mongoose = require("mongoose");
 const passport = require("./config/passport");
 const authRoutes = require("./routes/auth");
 const MongoStore = require("connect-mongo");
-const { MongoClient, ServerApiVersion} = require("mongodb");
-const { Schema, model } = mongoose;
-
+const {MongoClient, ServerApiVersion} = require("mongodb");
 require("dotenv").config();
 
-const DB_URI = 'mongodb+srv://admin:admin@cluster0.8imeo.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
-const dbName = "myDataBaseName";
+const DB_URI = 'mongodb+srv://admin:admin@cluster0.8imeo.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 
 const client = new MongoClient(DB_URI, {
     serverApi: {
@@ -19,15 +16,6 @@ const client = new MongoClient(DB_URI, {
         deprecationErrors: true,
     }
 });
-
-const ItemSchema = new Schema({
-    name: { type: String, required: true },
-    price: { type: Number, required: true },
-    category: { type: String },
-});
-
-const Item = model("Item", ItemSchema);
-
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
@@ -42,32 +30,27 @@ async function run() {
 }
 run().catch(console.dir);
 
-
-
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Підключення до бази даних
-mongoose.connect(process.env.MONGO_URI,
-    ).then(() => console.log("✅ Підключено до MongoDB"))
+
+mongoose.connect(DB_URI)
+    .then(() => console.log("✅ Підключено до MongoDB"))
     .catch(err => console.error("❌ Помилка підключення:", err));
 
-// Налаштування сесій
 app.use(session({
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET || "superset",
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
+    store: MongoStore.create({ mongoUrl: DB_URI }),
     cookie: { secure: false, httpOnly: true }
 }));
 
-// Ініціалізація Passport
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Маршрути
-app.use("/", authRoutes);
+app.use("/api", authRoutes, require("./routes/items"));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
