@@ -5,6 +5,7 @@ const passport = require("./config/passport");
 const authRoutes = require("./routes/auth");
 const MongoStore = require("connect-mongo");
 const {MongoClient, ServerApiVersion} = require("mongodb");
+const connectDB = require('./config/db')
 require("dotenv").config();
 
 const DB_URI = 'mongodb+srv://admin:admin@cluster0.8imeo.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';

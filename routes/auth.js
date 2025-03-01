@@ -5,6 +5,16 @@ const User = require('../models/User');
 const Item = require("../models/Item"); // Додаємо Item
 const router = express.Router();
 
+// Отримати всіх користувачів
+router.get('/users', async (req, res) => {
+    try {
+        const users = await User.find(); // Використання Mongoose замість MongoDB Driver
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 router.post('/register', async (req, res) => {
     try {
         const { email, password } = req.body;
