@@ -31,16 +31,16 @@ async function run() {
 }
 run().catch(console.dir);
 
-const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+const server = express();
+server.use(express.json());
+server.use(express.urlencoded({ extended: true }));
 
 
 mongoose.connect(DB_URI)
     .then(() => console.log("✅ Підключено до MongoDB"))
     .catch(err => console.error("❌ Помилка підключення:", err));
 
-app.use(session({
+server.use(session({
     secret: process.env.SESSION_SECRET || "superset",
     resave: false,
     saveUninitialized: false,
@@ -48,12 +48,12 @@ app.use(session({
     cookie: { secure: false, httpOnly: true }
 }));
 
-app.use(passport.initialize());
-app.use(passport.session());
+server.use(passport.initialize());
+server.use(passport.session());
 
-app.use("/api", authRoutes, require("./routes/items"));
+server.use("/api", authRoutes, require("./routes/items"));
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`🚀 Сервер працює на http://localhost:${PORT}`);
 });

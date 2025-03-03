@@ -2,7 +2,7 @@
 FROM node:lts
 
 # Встановлення робочої директорії в контейнері
-WORKDIR /app
+WORKDIR /server
 
 # Копіюємо package.json та package-lock.json для встановлення залежностей
 COPY package*.json ./
@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 3000
 
 # Команда для запуску додатка
-CMD ["node", "app.js"]
+CMD ["node", "server.js"]
